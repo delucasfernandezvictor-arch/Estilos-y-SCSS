@@ -1,0 +1,30 @@
+// =============================================================================
+// THEME / _ABSTRACTS.SCSS
+// Herramientas Sass (como la carpeta 1-abstracts del patrón 7-1).
+// Este parcial NO emite CSS por sí solo: solo define variables y mixins
+// que los componentes importan con @use.
+// =============================================================================
+
+// --- Variables de color ---
+$color-titulo: #e53935; // rojo
+$color-boton: #1e88e5;  // azul
+$color-borde: #43a047;  // verde
+
+// --- Medidas ---
+$grosor-borde: 3px;
+$espaciado: 1rem;
+$ancho-imagen: 400px;
+
+// --- Mixins ---
+
+// Flexbox configurable (parecido a flex-layout de m9-3)
+@mixin flex-layout($justify: center, $align: center) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+// Borde sólido con color y grosor por parámetro (con valores por defecto)
+@mixin borde($color: $color-borde, $grosor: $grosor-borde) {
+  border: $grosor solid $color;
+}

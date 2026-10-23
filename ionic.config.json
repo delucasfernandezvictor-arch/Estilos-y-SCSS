@@ -1,0 +1,7 @@
+{
+  "name": "ejercicio-sass",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

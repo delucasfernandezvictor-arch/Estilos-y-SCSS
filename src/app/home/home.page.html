@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Ejercicio Sass</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Clases con nomenclatura BEM: bloque "home" y elementos "home__..." -->
+  <div class="home">
+    <!-- Título (etiqueta HTML) -->
+    <h1 class="home__titulo">Mi primera app con Sass</h1>
+
+    <!-- Botón (componente Ionic) dentro de un contenedor flex alineado a la derecha -->
+    <div class="home__acciones">
+      <ion-button class="home__boton">Pulsar</ion-button>
+    </div>
+
+    <!-- Imagen centrada con borde verde -->
+    <div class="home__imagen-wrapper">
+      <img class="home__imagen" src="assets/ionic.png" alt="Logo de Ionic" />
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,45 @@
+// =============================================================================
+// HOME.PAGE.SCSS
+// Estilos SOLO de la página Home. Angular los encapsula: no afectan a otras
+// páginas. No hace falta "npm run watch:sass": ionic serve (ng serve) compila
+// este .scss automáticamente al guardar.
+// =============================================================================
+
+// Importamos variables y mixins con el prefijo "v" (sintaxis moderna @use)
+@use '../../theme/abstracts' as v;
+
+.home {
+  padding: v.$espaciado;
+
+  // 1. Título: rojo, mayúsculas y centrado
+  &__titulo {
+    color: v.$color-titulo;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  // 2. Contenedor del botón: lo empuja a la derecha con flexbox
+  &__acciones {
+    @include v.flex-layout($justify: flex-end);
+    margin: v.$espaciado 0;
+  }
+
+  // ion-button es un Web Component con Shadow DOM: su fondo no se cambia con
+  // "background" sino con las variables CSS que expone Ionic (--background).
+  &__boton {
+    --background: #{v.$color-boton};
+    --background-hover: #{v.$color-boton};
+    --color: #ffffff;
+  }
+
+  // 3. Imagen centrada con borde verde de 3px
+  &__imagen-wrapper {
+    @include v.flex-layout; // usa los valores por defecto: centrado
+  }
+
+  &__imagen {
+    width: v.$ancho-imagen;
+    max-width: 100%; // en móvil no se sale de la pantalla
+    @include v.borde; // verde, 3px por defecto
+  }
+}

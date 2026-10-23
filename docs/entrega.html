@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Ejercicio Sass con Ionic-Angular</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #222; font-size: 11pt; line-height: 1.5; }
+  h1 { color: #1e88e5; font-size: 20pt; margin: 0 0 4px; }
+  .sub { color: #666; margin: 0 0 18px; }
+  h2 { font-size: 14pt; border-bottom: 2px solid #1e88e5; padding-bottom: 3px; margin-top: 22px; }
+  h3 { font-size: 11.5pt; margin: 14px 0 4px; }
+  pre { background: #f5f7fa; border: 1px solid #dde3ea; border-left: 4px solid #1e88e5; padding: 8px 10px;
+        font-family: Consolas, 'Courier New', monospace; font-size: 8.8pt; line-height: 1.35;
+        white-space: pre-wrap; page-break-inside: avoid; }
+  code { font-family: Consolas, monospace; background: #f0f2f5; padding: 0 3px; font-size: 9.5pt; }
+  table { border-collapse: collapse; width: 100%; font-size: 10pt; }
+  th, td { border: 1px solid #ccc; padding: 5px 7px; text-align: left; vertical-align: top; }
+  th { background: #e3f2fd; }
+  .captura { width: 100%; border: 1px solid #ccc; margin-top: 6px; }
+  .resp { background: #f1f8e9; border-left: 4px solid #43a047; padding: 8px 12px; margin: 6px 0; }
+  .salto { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<h1>Ejercicio: diseño con Sass en Ionic-Angular</h1>
+<p class="sub">Proyecto <code>ejercicio-sass</code> · Módulo de Sass (M9) · Octubre 2026</p>
+
+<p><strong>Repositorio GitHub:</strong> <code>https://github.com/delucasfernandezvictor-arch/Estilos-y-SCSS</code></p>
+
+<h2>1. Enunciado y cumplimiento</h2>
+<table>
+  <tr><th>Requisito</th><th>Cómo se ha resuelto</th></tr>
+  <tr><td>1. Crear un proyecto Ionic-Angular</td><td><code>ionic start ejercicio-sass blank --type=angular</code></td></tr>
+  <tr><td>2. Página/componente <code>home</code></td><td>La plantilla <em>blank</em> ya la genera: <code>src/app/home/</code></td></tr>
+  <tr><td>3. Título + botón + imagen</td><td><code>&lt;h1&gt;</code> e <code>&lt;img&gt;</code> (HTML) y <code>&lt;ion-button&gt;</code> (componente Ionic)</td></tr>
+  <tr><td>4. Título rojo, mayúsculas, centrado</td><td><code>color</code>, <code>text-transform: uppercase</code>, <code>text-align: center</code></td></tr>
+  <tr><td>5. Botón a la derecha en azul</td><td>Contenedor flex con <code>justify-content: flex-end</code> + variable CSS <code>--background</code></td></tr>
+  <tr><td>6. Imagen centrada, borde verde 3px</td><td>Mixin <code>flex-layout</code> (centrado) + mixin <code>borde</code> (<code>3px solid</code> verde)</td></tr>
+</table>
+
+<h2>2. Resultado</h2>
+<p>Captura de la aplicación ejecutándose con <code>ionic serve</code> en <code>localhost:8101/home</code>:</p>
+<img class="captura" src="captura.png" alt="Captura de la app">
+
+<h2>3. Respuestas a las preguntas</h2>
+
+<h3>¿El componente usa Sass por defecto?</h3>
+<div class="resp">
+  <p><strong>Sí.</strong> Al crear un proyecto Ionic-Angular, cada página o componente se genera con su propio
+  archivo <code>.scss</code> (en este caso <code>home.page.scss</code>), enlazado desde el decorador
+  <code>@Component</code> mediante <code>styleUrls: ['home.page.scss']</code>.</p>
+  <p>Además, el <code>angular.json</code> ya viene configurado con <code>"inlineStyleLanguage": "scss"</code> y
+  <code>"styleext": "scss"</code>, de modo que los nuevos componentes también usan SCSS. Los estilos globales
+  están en <code>src/global.scss</code> y <code>src/theme/variables.scss</code>.</p>
+  <p>Los estilos del componente están <strong>encapsulados</strong>: Angular añade un atributo
+  <code>_ngcontent-xxx</code> a cada selector, así que solo afectan a la página Home.</p>
+</div>
+
+<h3>Aplico Sass, pero ¿se compila solo?</h3>
+<div class="resp">
+  <p><strong>Sí, se compila automáticamente.</strong> Al ejecutar <code>ionic serve</code> (que internamente lanza
+  <code>ng serve</code>), el sistema de build de Angular incluye el compilador de Sass: transforma los
+  <code>.scss</code> en CSS, los inyecta en la aplicación y recarga el navegador cada vez que se guarda un cambio.</p>
+</div>
+
+<h3>¿Hay que hacer <code>npm run watch:sass</code>?</h3>
+<div class="resp">
+  <p><strong>No.</strong> En los proyectos de clase (<code>m9-3-sass-fundamentals</code> y <code>patron-7-1-demo</code>)
+  sí era necesario porque eran páginas HTML estáticas sin herramienta de build: el script
+  <code>sass --watch scss/main.scss dist/css/main.css</code> era lo único que generaba el CSS.</p>
+  <p>En Ionic-Angular ese paso lo hace el propio <code>ionic serve</code> / <code>ng build</code>, por eso el proyecto
+  no tiene script <code>watch:sass</code> ni carpeta <code>dist/css</code>.</p>
+  <p><em>Comprobación:</em> en el JavaScript generado aparece ya el CSS compilado, con las variables sustituidas por
+  su valor: <code>.home__titulo[_ngcontent-%COMP%] { color: #e53935; text-transform: uppercase; ... }</code></p>
+</div>
+
+<h2 class="salto">4. Código comentado</h2>
+
+<h3>src/theme/_abstracts.scss: variables y mixins</h3>
+<p>Es el equivalente a la carpeta <code>1-abstracts</code> del patrón 7-1: un <em>partial</em> (empieza por
+<code>_</code>) que no genera CSS por sí mismo y solo define herramientas reutilizables.</p>
+<pre>// --- Variables de color ---
+$color-titulo: #e53935; // rojo
+$color-boton: #1e88e5;  // azul
+$color-borde: #43a047;  // verde
+
+// --- Medidas ---
+$grosor-borde: 3px;
+$espaciado: 1rem;
+$ancho-imagen: 400px;
+
+// Flexbox configurable (parecido a flex-layout de m9-3)
+@mixin flex-layout($justify: center, $align: center) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+// Borde sólido con color y grosor por parámetro (con valores por defecto)
+@mixin borde($color: $color-borde, $grosor: $grosor-borde) {
+  border: $grosor solid $color;
+}</pre>
+
+<h3>src/app/home/home.page.html: plantilla</h3>
+<p>Combina etiquetas HTML (<code>h1</code>, <code>img</code>) con un componente Ionic (<code>ion-button</code>).
+Las clases siguen la nomenclatura <strong>BEM</strong> (bloque <code>home</code>, elementos <code>home__...</code>).</p>
+<pre>&lt;ion-content [fullscreen]="true"&gt;
+  &lt;div class="home"&gt;
+    &lt;h1 class="home__titulo"&gt;Mi primera app con Sass&lt;/h1&gt;
+
+    &lt;div class="home__acciones"&gt;
+      &lt;ion-button class="home__boton"&gt;Pulsar&lt;/ion-button&gt;
+    &lt;/div&gt;
+
+    &lt;div class="home__imagen-wrapper"&gt;
+      &lt;img class="home__imagen" src="assets/ionic.png" alt="Logo de Ionic" /&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/ion-content&gt;</pre>
+
+<h3>src/app/home/home.page.scss: estilos de la página</h3>
+<pre>// Importamos variables y mixins con el prefijo "v" (sintaxis moderna @use)
+@use '../../theme/abstracts' as v;
+
+.home {
+  padding: v.$espaciado;
+
+  // 1. Título: rojo, mayúsculas y centrado
+  &amp;__titulo {
+    color: v.$color-titulo;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  // 2. Contenedor del botón: lo empuja a la derecha con flexbox
+  &amp;__acciones {
+    @include v.flex-layout($justify: flex-end);
+    margin: v.$espaciado 0;
+  }
+
+  // ion-button usa Shadow DOM: el color se cambia con sus variables CSS
+  &amp;__boton {
+    --background: #{v.$color-boton};
+    --background-hover: #{v.$color-boton};
+    --color: #ffffff;
+  }
+
+  // 3. Imagen centrada con borde verde de 3px
+  &amp;__imagen-wrapper {
+    @include v.flex-layout; // valores por defecto: centrado
+  }
+
+  &amp;__imagen {
+    width: v.$ancho-imagen;
+    max-width: 100%; // en móvil no se sale de la pantalla
+    @include v.borde; // verde, 3px por defecto
+  }
+}</pre>
+
+<h2>5. Comentarios relevantes</h2>
+<ul>
+  <li><strong><code>@use</code> en lugar de <code>@import</code>:</strong> <code>@import</code> está obsoleto en Dart Sass.
+  <code>@use</code> carga el módulo con un espacio de nombres (<code>v.</code>) y evita que las variables se vuelvan globales.</li>
+  <li><strong>Anidamiento con <code>&amp;</code>:</strong> <code>&amp;__titulo</code> dentro de <code>.home</code> genera
+  <code>.home__titulo</code>, así el código queda agrupado por bloque BEM.</li>
+  <li><strong>Mixins con parámetros por defecto:</strong> <code>flex-layout</code> se reutiliza dos veces: con
+  <code>flex-end</code> para el botón y con los valores por defecto (centrado) para la imagen.</li>
+  <li><strong>Interpolación <code>#{}</code>:</strong> en las propiedades personalizadas de CSS (<code>--background</code>)
+  Sass no evalúa las variables, por eso hay que escribir <code>#{v.$color-boton}</code>.</li>
+  <li><strong>Componentes Ionic y Shadow DOM:</strong> <code>background: blue</code> no funcionaría sobre
+  <code>ion-button</code>, porque su botón interno está dentro del Shadow DOM. Ionic expone variables CSS
+  (<code>--background</code>, <code>--color</code>...) para personalizarlo.</li>
+  <li><strong>Imagen en <code>src/assets</code>:</strong> Angular copia esa carpeta tal cual al build, por eso la ruta es
+  <code>assets/ionic.png</code>.</li>
+</ul>
+
+<h2>6. Cómo ejecutarlo</h2>
+<pre>git clone https://github.com/delucasfernandezvictor-arch/Estilos-y-SCSS
+cd Estilos-y-SCSS
+npm install
+ionic serve</pre>
+
+</body>
+</html>
